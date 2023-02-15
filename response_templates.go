@@ -37,13 +37,13 @@ func OkOrBadRequest[T any](ctx *gin.Context, result T, err error) {
 	Ok(ctx, result)
 }
 
-func OkOrNotFoundTemplate(ctx *gin.Context, templateName string, data map[string]any, err error) {
+func OkOrNotFoundTemplate(ctx *gin.Context, okTemplateName string, notFoundTemplateName string, data map[string]any, err error) {
 	if err != nil {
-		NotFoundTemplate(ctx, err.Error())
+		NotFoundTemplate(ctx, notFoundTemplateName)
 		return
 	}
 
-	OkTemplate(ctx, templateName, data)
+	OkTemplate(ctx, okTemplateName, data)
 }
 
 func NoContent(ctx *gin.Context) {
@@ -56,10 +56,9 @@ func NotFound(ctx *gin.Context, reason string) {
 	})
 }
 
-func NotFoundTemplate(ctx *gin.Context, reason string) {
-	ctx.HTML(http.StatusNotFound, "global/404.tmpl", gin.H{
-		"Error":     reason,
-		"PageTitle": "404",
+func NotFoundTemplate(ctx *gin.Context, templateName string) {
+	ctx.HTML(http.StatusNotFound, templateName, gin.H{
+		"message": "Page not found",
 	})
 }
 
