@@ -39,7 +39,7 @@ func OkOrBadRequest[T any](ctx *gin.Context, result T, err error) {
 
 func OkOrNotFoundTemplate(ctx *gin.Context, okTemplateName string, notFoundTemplateName string, data map[string]any, err error) {
 	if err != nil {
-		NotFoundTemplate(ctx, notFoundTemplateName)
+		NotFoundTemplate(ctx, notFoundTemplateName, data)
 		return
 	}
 
@@ -56,10 +56,8 @@ func NotFound(ctx *gin.Context, reason string) {
 	})
 }
 
-func NotFoundTemplate(ctx *gin.Context, templateName string) {
-	ctx.HTML(http.StatusNotFound, templateName, gin.H{
-		"message": "Page not found",
-	})
+func NotFoundTemplate(ctx *gin.Context, templateName string, data map[string]any) {
+	ctx.HTML(http.StatusNotFound, templateName, data)
 }
 
 func UnprocessableEntity(ctx *gin.Context, binder error) {
